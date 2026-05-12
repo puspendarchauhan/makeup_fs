@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Navigation from './components/Navigation';
@@ -12,7 +12,10 @@ import ParticipantsList from './components/Participants/ParticipantsList';
 
 import './App.css';
 
-// Events Page
+/* =========================
+   EVENTS PAGE
+========================= */
+
 function EventsPage({
   events,
   onAddEvent,
@@ -20,21 +23,31 @@ function EventsPage({
   onMarkComplete,
 }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-purple-100 to-indigo-100 p-10">
+    <div className="w-full min-h-screen overflow-y-auto bg-gradient-to-br from-slate-100 via-purple-100 to-indigo-100 p-10">
 
       <div className="max-w-7xl mx-auto">
 
-        <h1 className="text-5xl font-black text-gray-800 mb-10">
-          Event Management
-        </h1>
+        <div className="mb-10">
+
+          <h1 className="text-5xl font-black text-gray-800 mb-3">
+            Event Management 🚀
+          </h1>
+
+          <p className="text-lg text-gray-600">
+            Create and manage all your events beautifully.
+          </p>
+
+        </div>
 
         <EventForm onAddEvent={onAddEvent} />
 
-        <EventsList
-          events={events}
-          onDeleteEvent={onDeleteEvent}
-          onMarkComplete={onMarkComplete}
-        />
+        <div className="mt-10">
+          <EventsList
+            events={events}
+            onDeleteEvent={onDeleteEvent}
+            onMarkComplete={onMarkComplete}
+          />
+        </div>
 
       </div>
 
@@ -42,7 +55,10 @@ function EventsPage({
   );
 }
 
-// Participants Page
+/* =========================
+   PARTICIPANTS PAGE
+========================= */
+
 function ParticipantsPage({
   events,
   participants,
@@ -50,23 +66,33 @@ function ParticipantsPage({
   onDeleteParticipant,
 }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-purple-100 to-indigo-100 p-10">
+    <div className="w-full min-h-screen overflow-y-auto bg-gradient-to-br from-slate-100 via-purple-100 to-indigo-100 p-10">
 
       <div className="max-w-7xl mx-auto">
 
-        <h1 className="text-5xl font-black text-gray-800 mb-10">
-          Participant Management
-        </h1>
+        <div className="mb-10">
+
+          <h1 className="text-5xl font-black text-gray-800 mb-3">
+            Participant Management 👥
+          </h1>
+
+          <p className="text-lg text-gray-600">
+            Register and manage participants easily.
+          </p>
+
+        </div>
 
         <ParticipantForm
           events={events}
           onAddParticipant={onAddParticipant}
         />
 
-        <ParticipantsList
-          participants={participants}
-          onDeleteParticipant={onDeleteParticipant}
-        />
+        <div className="mt-10">
+          <ParticipantsList
+            participants={participants}
+            onDeleteParticipant={onDeleteParticipant}
+          />
+        </div>
 
       </div>
 
@@ -74,69 +100,54 @@ function ParticipantsPage({
   );
 }
 
+/* =========================
+   MAIN APP
+========================= */
+
 export default function App() {
 
-  // Load from localStorage
-  const [events, setEvents] = useState(() => {
-    const savedEvents = localStorage.getItem('events');
-    return savedEvents ? JSON.parse(savedEvents) : [];
-  });
+  const [events, setEvents] = useState([]);
 
-  const [participants, setParticipants] = useState(() => {
-    const savedParticipants = localStorage.getItem('participants');
-    return savedParticipants
-      ? JSON.parse(savedParticipants)
-      : [];
-  });
+  const [participants, setParticipants] = useState([]);
 
-  // Save events
-  useEffect(() => {
-    localStorage.setItem(
-      'events',
-      JSON.stringify(events)
-    );
-  }, [events]);
+  /* =========================
+     EVENT FUNCTIONS
+  ========================= */
 
-  // Save participants
-  useEffect(() => {
-    localStorage.setItem(
-      'participants',
-      JSON.stringify(participants)
-    );
-  }, [participants]);
-
-  // Add Event
   const handleAddEvent = (newEvent) => {
-    setEvents([...events, newEvent]);
+
+    setEvents((prev) => [
+      ...prev,
+      newEvent,
+    ]);
   };
 
-  // Delete Event
   const handleDeleteEvent = (eventId) => {
 
     const deletedEvent = events.find(
-      (e) => e.id === eventId
+      (event) => event.id === eventId
     );
 
-    setEvents(
-      events.filter(
+    setEvents((prev) =>
+      prev.filter(
         (event) => event.id !== eventId
       )
     );
 
     // Remove related participants
-    setParticipants(
-      participants.filter(
-        (p) =>
-          p.eventName !== deletedEvent?.eventName
+    setParticipants((prev) =>
+      prev.filter(
+        (participant) =>
+          participant.eventName !==
+          deletedEvent?.eventName
       )
     );
   };
 
-  // Mark Complete
   const handleMarkComplete = (eventId) => {
 
-    setEvents(
-      events.map((event) =>
+    setEvents((prev) =>
+      prev.map((event) =>
         event.id === eventId
           ? {
               ...event,
@@ -147,37 +158,51 @@ export default function App() {
     );
   };
 
-  // Add Participant
+  /* =========================
+     PARTICIPANT FUNCTIONS
+  ========================= */
+
   const handleAddParticipant = (
     newParticipant
   ) => {
 
-    setParticipants([
-      ...participants,
+    setParticipants((prev) => [
+      ...prev,
       newParticipant,
     ]);
   };
 
-  // Delete Participant
   const handleDeleteParticipant = (
     participantId
   ) => {
 
-    setParticipants(
-      participants.filter(
-        (p) => p.id !== participantId
+    setParticipants((prev) =>
+      prev.filter(
+        (participant) =>
+          participant.id !== participantId
       )
     );
   };
 
+  /* =========================
+     RETURN
+  ========================= */
+
   return (
+
     <Router>
 
-      <div className="min-h-screen">
+      <div className="w-full min-h-screen overflow-x-hidden">
+
+        {/* NAVBAR */}
 
         <Navigation />
 
+        {/* ROUTES */}
+
         <Routes>
+
+          {/* DASHBOARD */}
 
           <Route
             path="/"
@@ -188,6 +213,8 @@ export default function App() {
               />
             }
           />
+
+          {/* EVENTS */}
 
           <Route
             path="/events"
@@ -200,6 +227,8 @@ export default function App() {
               />
             }
           />
+
+          {/* PARTICIPANTS */}
 
           <Route
             path="/participants"

@@ -32,9 +32,10 @@ export default function EventsList({
   }
 
   return (
-    <div>
+    <div className="w-full">
 
-      {/* Search */}
+      {/* SEARCH */}
+
       <div className="mb-8">
 
         <input
@@ -49,8 +50,9 @@ export default function EventsList({
 
       </div>
 
-      {/* Cards */}
-      <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
+      {/* EVENTS GRID */}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 pb-20">
 
         {filteredEvents.map((event, index) => (
 
@@ -66,7 +68,7 @@ export default function EventsList({
             }}
             transition={{
               duration: 0.5,
-              delay: index * 0.1,
+              delay: index * 0.08,
             }}
             whileHover={{
               scale: 1.03,
@@ -74,6 +76,8 @@ export default function EventsList({
             }}
             className="bg-white/70 backdrop-blur-lg rounded-3xl shadow-2xl p-8 border border-white/30"
           >
+
+            {/* TOP */}
 
             <div className="flex justify-between items-start mb-6">
 
@@ -93,15 +97,25 @@ export default function EventsList({
 
             </div>
 
-            <div className="space-y-3 text-gray-700 mb-8">
+            {/* DETAILS */}
 
-              <p>📅 {event.date}</p>
+            <div className="space-y-4 text-gray-700 mb-8">
 
-              <p>📍 {event.venue}</p>
+              <p className="text-lg">
+                📅 {event.date}
+              </p>
 
-              <p>👤 {event.organizer}</p>
+              <p className="text-lg">
+                📍 {event.venue}
+              </p>
+
+              <p className="text-lg">
+                👤 {event.organizer}
+              </p>
 
             </div>
+
+            {/* BUTTONS */}
 
             <div className="flex gap-3">
 
